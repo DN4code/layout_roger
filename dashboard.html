@@ -1,0 +1,248 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard - CryptoPay</title>
+    <link rel="stylesheet" href="css/style.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+</head>
+<body>
+    <div class="container">
+        <header class="header dashboard-header">
+            <div class="logo">
+                <i class="fas fa-wallet"></i>
+                <h1>CryptoPay</h1>
+            </div>
+            <div class="user-info">
+                <span class="welcome-text">Bem-vindo, <strong>João Silva</strong></span>
+                <button class="btn btn-secondary" onclick="logout()">
+                    <i class="fas fa-sign-out-alt"></i>
+                    Sair
+                </button>
+            </div>
+        </header>
+
+        <main class="main-content dashboard-main">
+            <!-- Seção de Saldos -->
+            <div class="balance-section">
+                <div class="balance-card brl-balance">
+                    <div class="balance-header">
+                        <h3><i class="fas fa-dollar-sign"></i> Saldo BRL</h3>
+                        <button class="btn btn-small btn-secondary" onclick="refreshBalance()">
+                            <i class="fas fa-sync-alt"></i>
+                        </button>
+                    </div>
+                    <div class="balance-amount">
+                        <span class="currency">R$</span>
+                        <span class="amount" id="brlBalance">12.850,75</span>
+                    </div>
+                </div>
+
+                <div class="balance-card usdt-balance">
+                    <div class="balance-header">
+                        <h3><i class="fab fa-bitcoin"></i> Saldo USDT</h3>
+                        <button class="btn btn-small btn-secondary" onclick="refreshUsdtBalance()">
+                            <i class="fas fa-sync-alt"></i>
+                        </button>
+                    </div>
+                    <div class="balance-amount">
+                        <span class="currency">$</span>
+                        <span class="amount" id="usdtBalance">2.456,80</span>
+                        <small>USDT</small>
+                    </div>
+                </div>
+
+                <div class="balance-card quotation-card">
+                    <div class="balance-header">
+                        <h3><i class="fas fa-chart-line"></i> Cotação USDT</h3>
+                        <span class="update-time">Atualizado: 14:30</span>
+                    </div>
+                    <div class="quotation-info">
+                        <div class="quote-price">
+                            <span class="currency">R$</span>
+                            <span class="amount" id="usdtQuote">5,23</span>
+                        </div>
+                        <div class="quote-change positive">
+                            <i class="fas fa-arrow-up"></i>
+                            +2,1%
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Seção PIX -->
+            <div class="pix-section">
+                <div class="section-header">
+                    <h2><i class="fas fa-qrcode"></i> Área PIX</h2>
+                </div>
+                <div class="pix-content">
+                    <div class="pix-info">
+                        <h3>Receber via PIX</h3>
+                        <p>Use o QR Code ou a chave PIX para receber pagamentos</p>
+                        <div class="pix-key">
+                            <strong>Chave PIX:</strong> joao@cryptopay.com.br
+                            <button class="copy-btn" onclick="copyPixKey()">
+                                <i class="fas fa-copy"></i>
+                            </button>
+                        </div>
+                    </div>
+                    <div class="qr-code-container">
+                        <div class="qr-code">
+                            <i class="fas fa-qrcode"></i>
+                            <p>QR Code PIX</p>
+                        </div>
+                        <button class="btn btn-primary" onclick="generateQRCode()">
+                            Gerar QR Code
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Seção Wallet USDT -->
+            <div class="wallet-section">
+                <div class="section-header">
+                    <h2><i class="fab fa-bitcoin"></i> Wallet USDT</h2>
+                </div>
+                
+                <div class="wallet-content">
+                    <div class="wallet-card">
+                        <h3>Enviar USDT</h3>
+                        <form class="send-usdt-form">
+                            <div class="form-group">
+                                <label for="wallet-address">
+                                    <i class="fas fa-wallet"></i>
+                                    Endereço da Carteira
+                                </label>
+                                <input type="text" id="wallet-address" placeholder="0x..." required>
+                            </div>
+                            <div class="form-group">
+                                <label for="usdt-amount">
+                                    <i class="fas fa-coins"></i>
+                                    Quantidade USDT
+                                </label>
+                                <input type="number" id="usdt-amount" step="0.01" min="0.01" placeholder="0.00" required>
+                                <small>Disponível: $2.456,80 USDT</small>
+                            </div>
+                            <button type="button" class="btn btn-primary" onclick="showPasswordModal()">
+                                <i class="fas fa-paper-plane"></i>
+                                Enviar USDT
+                            </button>
+                        </form>
+                    </div>
+
+                    <div class="wallet-card">
+                        <h3>Converter USDT → BRL</h3>
+                        <div class="conversion-calculator">
+                            <div class="form-group">
+                                <label for="usdt-to-convert">
+                                    <i class="fab fa-bitcoin"></i>
+                                    USDT para converter
+                                </label>
+                                <input type="number" id="usdt-to-convert" step="0.01" min="0.01" placeholder="0.00" onchange="calculateConversion()">
+                            </div>
+                            <div class="conversion-arrow">
+                                <i class="fas fa-exchange-alt"></i>
+                            </div>
+                            <div class="form-group">
+                                <label>
+                                    <i class="fas fa-dollar-sign"></i>
+                                    Valor em BRL
+                                </label>
+                                <input type="text" id="brl-result" readonly placeholder="R$ 0,00">
+                            </div>
+                            <div class="conversion-info">
+                                <small>Taxa: R$ 5,23 por USDT • Taxa de conversão: 2%</small>
+                            </div>
+                            <button type="button" class="btn btn-success" onclick="convertUsdt()">
+                                <i class="fas fa-exchange-alt"></i>
+                                Converter para BRL
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Histórico de Transações -->
+            <div class="transactions-section">
+                <div class="section-header">
+                    <h2><i class="fas fa-history"></i> Últimas Transações</h2>
+                    <button class="btn btn-secondary" onclick="showAllTransactions()">
+                        Ver Todas
+                    </button>
+                </div>
+                <div class="transactions-list">
+                    <div class="transaction-item">
+                        <div class="transaction-icon pix">
+                            <i class="fas fa-qrcode"></i>
+                        </div>
+                        <div class="transaction-info">
+                            <h4>PIX Recebido</h4>
+                            <small>28/10/2025 - 14:25</small>
+                        </div>
+                        <div class="transaction-amount positive">
+                            +R$ 1.250,00
+                        </div>
+                    </div>
+                    <div class="transaction-item">
+                        <div class="transaction-icon usdt">
+                            <i class="fab fa-bitcoin"></i>
+                        </div>
+                        <div class="transaction-info">
+                            <h4>USDT Enviado</h4>
+                            <small>28/10/2025 - 12:15</small>
+                        </div>
+                        <div class="transaction-amount negative">
+                            -$500,00 USDT
+                        </div>
+                    </div>
+                    <div class="transaction-item">
+                        <div class="transaction-icon conversion">
+                            <i class="fas fa-exchange-alt"></i>
+                        </div>
+                        <div class="transaction-info">
+                            <h4>Conversão USDT → BRL</h4>
+                            <small>27/10/2025 - 16:45</small>
+                        </div>
+                        <div class="transaction-amount positive">
+                            +R$ 2.615,00
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <!-- Modal de Confirmação de Senha -->
+    <div id="passwordModal" class="modal">
+        <div class="modal-content">
+            <span class="close" onclick="closeModal('passwordModal')">&times;</span>
+            <h2>Confirmar Transação</h2>
+            <div class="transaction-summary">
+                <p><strong>Enviar:</strong> <span id="confirmAmount">0.00</span> USDT</p>
+                <p><strong>Para:</strong> <span id="confirmAddress">...</span></p>
+            </div>
+            <form class="password-form">
+                <div class="form-group">
+                    <label for="transaction-password">
+                        <i class="fas fa-lock"></i>
+                        Digite sua senha para confirmar
+                    </label>
+                    <input type="password" id="transaction-password" required>
+                </div>
+                <div class="modal-buttons">
+                    <button type="button" class="btn btn-secondary" onclick="closeModal('passwordModal')">
+                        Cancelar
+                    </button>
+                    <button type="button" class="btn btn-primary" onclick="confirmTransaction()">
+                        <i class="fas fa-check"></i>
+                        Confirmar Envio
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <script src="js/script.js"></script>
+</body>
+</html>

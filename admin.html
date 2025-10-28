@@ -1,0 +1,207 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Aprovação de Cadastros - CryptoPay Admin</title>
+    <link rel="stylesheet" href="css/style.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+</head>
+<body>
+    <div class="container">
+        <header class="header admin-header">
+            <div class="logo">
+                <i class="fas fa-shield-alt"></i>
+                <h1>CryptoPay Admin</h1>
+            </div>
+            <div class="admin-nav">
+                <button class="btn btn-secondary" onclick="logout()">
+                    <i class="fas fa-sign-out-alt"></i>
+                    Sair
+                </button>
+            </div>
+        </header>
+
+        <main class="main-content">
+            <div class="admin-container">
+                <div class="admin-header">
+                    <h2>Aprovação de Cadastros</h2>
+                    <div class="filter-section">
+                        <select id="statusFilter" onchange="filterByStatus()">
+                            <option value="all">Todos os Status</option>
+                            <option value="pendente">Pendente</option>
+                            <option value="aprovado">Aprovado</option>
+                            <option value="rejeitado">Rejeitado</option>
+                        </select>
+                        <input type="text" id="searchInput" placeholder="Buscar por nome ou conta..." onkeyup="searchClients()">
+                    </div>
+                </div>
+
+                <div class="table-container">
+                    <table class="clients-table">
+                        <thead>
+                            <tr>
+                                <th>Conta</th>
+                                <th>Nome</th>
+                                <th>CNPJ</th>
+                                <th>Data Cadastro</th>
+                                <th>Status</th>
+                                <th>Ações</th>
+                            </tr>
+                        </thead>
+                        <tbody id="clientsTableBody">
+                            <tr data-status="pendente">
+                                <td>
+                                    <span class="account-number">#001234</span>
+                                </td>
+                                <td>
+                                    <div class="client-info">
+                                        <strong>João Silva Ltda</strong>
+                                        <small>joao@empresa.com</small>
+                                    </div>
+                                </td>
+                                <td>12.345.678/0001-90</td>
+                                <td>28/10/2025</td>
+                                <td>
+                                    <span class="status-badge status-pendente">
+                                        <i class="fas fa-clock"></i>
+                                        Pendente
+                                    </span>
+                                </td>
+                                <td>
+                                    <div class="action-buttons">
+                                        <button class="btn btn-small btn-info" onclick="viewDetails('001234')" title="Ver Detalhes">
+                                            <i class="fas fa-eye"></i>
+                                        </button>
+                                        <button class="btn btn-small btn-success" onclick="approveClient('001234')" title="Aprovar">
+                                            <i class="fas fa-check"></i>
+                                        </button>
+                                        <button class="btn btn-small btn-danger" onclick="rejectClient('001234')" title="Rejeitar">
+                                            <i class="fas fa-times"></i>
+                                        </button>
+                                    </div>
+                                </td>
+                            </tr>
+                            <tr data-status="aprovado">
+                                <td>
+                                    <span class="account-number">#001235</span>
+                                </td>
+                                <td>
+                                    <div class="client-info">
+                                        <strong>Maria Santos ME</strong>
+                                        <small>maria@comercio.com</small>
+                                    </div>
+                                </td>
+                                <td>98.765.432/0001-10</td>
+                                <td>27/10/2025</td>
+                                <td>
+                                    <span class="status-badge status-aprovado">
+                                        <i class="fas fa-check-circle"></i>
+                                        Aprovado
+                                    </span>
+                                </td>
+                                <td>
+                                    <div class="action-buttons">
+                                        <button class="btn btn-small btn-info" onclick="viewDetails('001235')" title="Ver Detalhes">
+                                            <i class="fas fa-eye"></i>
+                                        </button>
+                                        <button class="btn btn-small btn-warning" onclick="suspendClient('001235')" title="Suspender">
+                                            <i class="fas fa-pause"></i>
+                                        </button>
+                                    </div>
+                                </td>
+                            </tr>
+                            <tr data-status="pendente">
+                                <td>
+                                    <span class="account-number">#001236</span>
+                                </td>
+                                <td>
+                                    <div class="client-info">
+                                        <strong>Tech Solutions Ltda</strong>
+                                        <small>contato@techsolutions.com</small>
+                                    </div>
+                                </td>
+                                <td>11.222.333/0001-44</td>
+                                <td>28/10/2025</td>
+                                <td>
+                                    <span class="status-badge status-pendente">
+                                        <i class="fas fa-clock"></i>
+                                        Pendente
+                                    </span>
+                                </td>
+                                <td>
+                                    <div class="action-buttons">
+                                        <button class="btn btn-small btn-info" onclick="viewDetails('001236')" title="Ver Detalhes">
+                                            <i class="fas fa-eye"></i>
+                                        </button>
+                                        <button class="btn btn-small btn-success" onclick="approveClient('001236')" title="Aprovar">
+                                            <i class="fas fa-check"></i>
+                                        </button>
+                                        <button class="btn btn-small btn-danger" onclick="rejectClient('001236')" title="Rejeitar">
+                                            <i class="fas fa-times"></i>
+                                        </button>
+                                    </div>
+                                </td>
+                            </tr>
+                            <tr data-status="rejeitado">
+                                <td>
+                                    <span class="account-number">#001237</span>
+                                </td>
+                                <td>
+                                    <div class="client-info">
+                                        <strong>ABC Comércio</strong>
+                                        <small>abc@comercio.com</small>
+                                    </div>
+                                </td>
+                                <td>55.666.777/0001-88</td>
+                                <td>26/10/2025</td>
+                                <td>
+                                    <span class="status-badge status-rejeitado">
+                                        <i class="fas fa-times-circle"></i>
+                                        Rejeitado
+                                    </span>
+                                </td>
+                                <td>
+                                    <div class="action-buttons">
+                                        <button class="btn btn-small btn-info" onclick="viewDetails('001237')" title="Ver Detalhes">
+                                            <i class="fas fa-eye"></i>
+                                        </button>
+                                        <button class="btn btn-small btn-success" onclick="reactivateClient('001237')" title="Reativar">
+                                            <i class="fas fa-redo"></i>
+                                        </button>
+                                    </div>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+
+                <div class="pagination">
+                    <button class="btn btn-secondary" onclick="previousPage()">
+                        <i class="fas fa-chevron-left"></i>
+                        Anterior
+                    </button>
+                    <span class="page-info">Página 1 de 1</span>
+                    <button class="btn btn-secondary" onclick="nextPage()">
+                        Próxima
+                        <i class="fas fa-chevron-right"></i>
+                    </button>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <!-- Modal de Detalhes do Cliente -->
+    <div id="clientDetailsModal" class="modal">
+        <div class="modal-content modal-large">
+            <span class="close" onclick="closeModal('clientDetailsModal')">&times;</span>
+            <h2>Detalhes do Cliente</h2>
+            <div id="clientDetailsContent">
+                <!-- Conteúdo será preenchido dinamicamente -->
+            </div>
+        </div>
+    </div>
+
+    <script src="js/script.js"></script>
+</body>
+</html>
